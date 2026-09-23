@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Repo Catalogue — GitHub Explorer</title>
+  <meta name="description" content="Search any GitHub user and browse their public repositories as index cards.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,400;1,9..144,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#home" class="brand">
+        <img src="assets/favicon.svg" alt="" width="32" height="32">
+        <span class="brand-name">Repo<em>Catalogue</em></span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <span class="visually-hidden">Open menu</span>
+        <span class="nav-toggle-bar" aria-hidden="true"></span>
+      </button>
+
+      <nav id="site-nav" class="site-nav" aria-label="Main">
+        <ul>
+          <li><a href="#home" class="nav-link">Home</a></li>
+          <li><a href="#search" class="nav-link">Search</a></li>
+          <li><a href="#about" class="nav-link">About</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Home -->
+    <section id="home" class="hero" aria-labelledby="hero-title">
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow">Drawer No. 01 &middot; Public repositories</p>
+          <h1 id="hero-title">Every GitHub account is a <em>card catalogue.</em> Open a drawer.</h1>
+          <p class="lede">
+            Type a username and its public repositories are filed as index cards &mdash;
+            ready to be filtered by language and sorted by name, stars or recency.
+          </p>
+          <a href="#search" class="btn btn-primary">Start searching</a>
+        </div>
+
+        <div class="hero-stack" aria-hidden="true">
+          <div class="mini-card"><span></span><span></span><span></span></div>
+          <div class="mini-card"><span></span><span></span><span></span></div>
+          <div class="mini-card"><b>No. 001</b><span></span><span></span><i>Python</i></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search -->
+    <section id="search" class="search-section" aria-labelledby="search-title">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-number">&sect; 02</span>
+          <h2 id="search-title">Search the catalogue</h2>
+        </div>
+
+        <form id="search-form" class="search-form" novalidate>
+          <label for="username" class="form-label">GitHub username</label>
+          <div class="form-row">
+            <div class="input-wrap">
+              <span class="input-prefix" aria-hidden="true">github.com/</span>
+              <input
+                id="username"
+                name="username"
+                type="text"
+                required
+                maxlength="39"
+                pattern="[A-Za-z0-9](?:[A-Za-z0-9]|-(?=[A-Za-z0-9])){0,38}"
+                autocomplete="off"
+                autocapitalize="off"
+                spellcheck="false"
+                placeholder="e.g. torvalds"
+                aria-describedby="username-hint username-error">
+            </div>
+            <button type="submit" class="btn btn-primary" id="search-btn">Search</button>
+          </div>
+          <p id="username-hint" class="form-hint">Letters, numbers and single hyphens &mdash; up to 39 characters.</p>
+          <p id="username-error" class="form-error" hidden></p>
+        </form>
+
+        <div id="recent" class="recent" hidden>
+          <span class="recent-label">Recently opened:</span>
+          <ul id="recent-list" class="recent-list"></ul>
+        </div>
+
+        <div id="status" class="status" role="status" aria-live="polite"></div>
+
+        <div id="results" class="results" hidden>
+          <article id="profile" class="profile" aria-label="User profile"></article>
+
+          <div class="toolbar">
+            <div class="filter" role="group" aria-label="Filter by language">
+              <span class="toolbar-label">Language</span>
+              <div class="filter-tabs">
+                <button type="button" class="tab" data-lang="All" aria-pressed="true">All <span class="tab-count"></span></button>
+                <button type="button" class="tab" data-lang="JavaScript" aria-pressed="false">JavaScript <span class="tab-count"></span></button>
+                <button type="button" class="tab" data-lang="TypeScript" aria-pressed="false">TypeScript <span class="tab-count"></span></button>
+                <button type="button" class="tab" data-lang="Python" aria-pressed="false">Python <span class="tab-count"></span></button>
+                <button type="button" class="tab" data-lang="Java" aria-pressed="false">Java <span class="tab-count"></span></button>
+                <button type="button" class="tab" data-lang="Other" aria-pressed="false">Other <span class="tab-count"></span></button>
+              </div>
+            </div>
+
+            <div class="sort">
+              <label for="sort" class="toolbar-label">Sort by</label>
+              <select id="sort" class="select">
+                <option value="stars-desc">Stars: most first</option>
+                <option value="stars-asc">Stars: fewest first</option>
+                <option value="name-asc">Repository name: A &rarr; Z</option>
+                <option value="name-desc">Repository name: Z &rarr; A</option>
+                <option value="updated-desc">Recently updated</option>
+              </select>
+            </div>
+          </div>
+
+          <p id="result-count" class="result-count" aria-live="polite"></p>
+          <ul id="repo-grid" class="repository-grid"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="about" aria-labelledby="about-title">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-number">&sect; 03</span>
+          <h2 id="about-title">About this catalogue</h2>
+        </div>
+
+        <div class="about-grid">
+          <p class="about-lede">
+            RepoCatalogue is a small study project: a responsive single page that reads live
+            data from the public GitHub REST API. There are no frameworks and no build step,
+            just semantic HTML, CSS and JavaScript.
+          </p>
+
+          <ol class="steps">
+            <li>
+              <h3>Ask</h3>
+              <p>The form checks the username before anything leaves the browser.</p>
+            </li>
+            <li>
+              <h3>Fetch</h3>
+              <p><code>fetch()</code> with <code>async/await</code> loads the profile and up to 100 repositories as JSON.</p>
+            </li>
+            <li>
+              <h3>File</h3>
+              <p>Each repository becomes a card built in JavaScript, then filtered and sorted on the spot.</p>
+            </li>
+            <li>
+              <h3>Remember</h3>
+              <p><code>localStorage</code> keeps your last search and reopens it on your next visit.</p>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>RepoCatalogue &middot; Practical Task 1 &middot; <span id="year"></span></p>
+      <p>Data from the <a href="https://docs.github.com/en/rest" target="_blank" rel="noopener">GitHub REST API</a></p>
+    </div>
+  </footer>
+</body>
+</html>
